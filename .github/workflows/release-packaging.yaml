@@ -20,10 +20,14 @@ jobs:
           target: thumbv6m-none-eabi
           override: true
           components: elf2uf2-rs
+      - name: Install elf2uf2-rs
+        run: cargo install elf2uf2-rs
       - name: Release Build
         run: cargo build --release
+      - name: Convert ELF to UF2
+        run: elf2uf2-rs target/thumbv6m-none-eabi/release/${{ env.PROJECT_NAME_UNDERSCORE }} ${{ env.PROJECT_NAME_UNDERSCORE }}.uf2
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.PROJECT_NAME_UNDERSCORE }}
-          path: target/release/${{ env.PROJECT_NAME_UNDERSCORE }}
+          name: ${{ env.PROJECT_NAME_UNDERSCORE }}.uf2
+          path: ${{ env.PROJECT_NAME_UNDERSCORE }}.uf2
