@@ -19,7 +19,6 @@ jobs:
           toolchain: stable
           target: thumbv6m-none-eabi
           override: true
-          components: elf2uf2-rs
       - name: Install elf2uf2-rs
         run: cargo install elf2uf2-rs
       - name: Release Build
