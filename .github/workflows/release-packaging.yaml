@@ -19,13 +19,15 @@ jobs:
           toolchain: stable
           target: thumbv6m-none-eabi
           override: true
+      -name: Install libudev
+        run: sudo apt-get install libudev
       - name: Install elf2uf2-rs
         run: cargo install elf2uf2-rs
       - name: Release Build
         run: cargo build --release
       - name: Convert ELF to UF2
         run: elf2uf2-rs target/thumbv6m-none-eabi/release/${{ env.PROJECT_NAME_UNDERSCORE }} ${{ env.PROJECT_NAME_UNDERSCORE }}.uf2
-      - name: 'Upload Artifact'
+      - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.PROJECT_NAME_UNDERSCORE }}.uf2
