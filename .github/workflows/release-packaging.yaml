@@ -18,6 +18,7 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+          components: elf2uf2-rs
       - name: Release Build
         run: cargo build --release
       - name: 'Upload Artifact'
