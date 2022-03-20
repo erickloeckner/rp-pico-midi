@@ -30,10 +30,12 @@ impl<P: PinId> Button<P> {
         }
     }
     
-    pub fn poll(&mut self, millis: u32) {
+    pub fn poll(&mut self, time: u32) {
         let current_state = self.pin.is_low().unwrap();
-        let last_on_delta = sub_handle_overflow(millis, self.last_on);
-        let last_off_delta = sub_handle_overflow(millis, self.last_off);
+        // let last_on_delta = sub_handle_overflow(millis, self.last_on);
+        // let last_off_delta = sub_handle_overflow(millis, self.last_off);
+        let last_on_delta = time.wrapping_sub(self.last_on);
+        let last_off_delta = time.wrapping_sub(self.last_off);
         self.last_state = self.state;
         
         match self.debounce_state {
@@ -88,8 +90,25 @@ impl<P: PinId> Button<P> {
     pub fn toggle_state(&self) -> bool {
         self.toggle_state
     }
+    
+    pub fn rising_edge(&self) -> bool {
+        if self.state == true && self.last_state == false {
+            true
+        } else {
+            false
+        }
+    }
+    
+    pub fn falling_edge(&self) -> bool {
+        if self.state == false && self.last_state == true {
+            true
+        } else {
+            false
+        }
+    }
 }
 
+/*
 fn sub_handle_overflow(millis: u32, last_time: u32) -> u32 {
     //~ until the millis variable overflows, it should always be larger than or equal to last_time
     if millis >= last_time {
@@ -100,6 +119,7 @@ fn sub_handle_overflow(millis: u32, last_time: u32) -> u32 {
         (u32::MAX - last_time) + millis
     }
 }
+*/
 
 enum DebounceState {
     Off,
