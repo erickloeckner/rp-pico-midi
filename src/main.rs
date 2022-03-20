@@ -108,16 +108,15 @@ fn main() -> ! {
         });
         
         button1.poll(millis);
-        if button1.state() == true {
-            if button1.last_state() == false {
-                midi::note_on(&mut uart, 1, 35, 63);
-                led_pin.set_high().unwrap();
-            }
-        } else {
-            if button1.last_state() == true {
-                midi::note_on(&mut uart, 1, 35, 0);
-                led_pin.set_low().unwrap();
-            }
+        
+        if button1.rising_edge() == true {
+            midi::note_on(&mut uart, 1, 35, 63);
+            led_pin.set_high().unwrap();
+        }
+        
+        if button1.falling_edge() == true {
+            midi::note_on(&mut uart, 1, 35, 0);
+            led_pin.set_low().unwrap();
         }
     }
 }
